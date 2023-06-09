@@ -1,13 +1,6 @@
 //Variables to store
-let taskToAdd;
 let taskId = 0;
-let data = "MyName";
-//Creating task List (Array of Objects)
-var taskList = [];
-taskList.push(taskId);
-
-//Clear local storage
-//localStorage.clear();
+let indexCount = "indexCount";
 
 //Enter to input task
 var textBox = document.getElementById("textarea");
@@ -22,17 +15,19 @@ textBox.addEventListener("keyup", function (event) {
 	}
 });
 
+// function to add the task to the list
 function addTaskToList(taskToAdd) {
 	taskId++;
 	let obj = {};
 	obj.id = taskId;
 	obj.task = taskToAdd;
 	obj.status = false;
-	taskList.push(obj);
+	store(obj, taskId);
 	appendToUl(obj);
 	// console.log(taskList);
 }
 
+// function to append the task to the table
 function appendToUl(obj) {
 	var tableId = document.getElementById("table1");
 	var row = document.createElement("tr");
@@ -45,8 +40,9 @@ function appendToUl(obj) {
 	check.type = "checkbox";
 	check.id = `checkId${obj.id}`;
 	check.setAttribute("onclick", `OnCheckUncheck(checkId${obj.id})`);
-	if (obj.check == true) {
-		check.checked = false;
+	if (obj.status == true) {
+		row.setAttribute("class", "checked");
+		check.checked = true;
 	}
 	//adding values
 	c1.innerHTML = obj.id;
@@ -60,43 +56,52 @@ function appendToUl(obj) {
 
 	//appending row to table
 	tableId.appendChild(row);
-
-	// console.log(row);
 }
 
+// function to check and uncheck the checkbox
 function OnCheckUncheck(checkEle) {
-	// console.log(checkEle, typeof checkEle);
 	let index = checkEle.id.at(-1);
 	if (checkEle.checked) {
 		checkEle.parentNode.parentNode.setAttribute("class", "checked");
-		taskList[index].status = true;
+		setObjStatus(index, true);
+		// taskList[index].status = true;
 	} else {
 		checkEle.parentNode.parentNode.setAttribute("class", "");
-		taskList[index].status = false;
+		setObjStatus(index, false);
+		// taskList[index].status = false;
 	}
-	store();
 }
 
-function store() {
-	taskList[0] = taskId;
-	let taskListJson = JSON.stringify(taskList);
-	localStorage.setItem(data, taskListJson);
+// function to store the data in the local storage
+function store(obj, index) {
+	localStorage.setItem(indexCount, index);
+	let taskListJson = JSON.stringify(obj);
+	localStorage.setItem(index, taskListJson);
+	console.log(index, typeof index);
 }
 
-function fetch() {
-	if (!localStorage.getItem(data)) {
+function fetchAll() {
+	if (!localStorage.getItem(indexCount)) {
+		localStorage.setItem(indexCount, 0);
 		// alert("No data");
 		return;
 	}
-	taskList = JSON.parse(localStorage.getItem(data));
-	taskId = taskList[0];
-	for (let i = 1; i < taskList.length; i++) {
-		let obj = taskList[i];
+	taskId = localStorage.getItem(indexCount);
+	for (let i = 1; i <= taskId; i++) {
+		let obj = JSON.parse(localStorage.getItem(i));
 		appendToUl(obj);
 	}
 }
 
+// function to clear all the data from the local storage
 function clearAllData() {
 	localStorage.clear();
 	location.reload();
+}
+
+// function to store the status of the checkbox in the local storage
+function setObjStatus(index, status) {
+	let obj = JSON.parse(localStorage.getItem(index));
+	obj.status = status;
+	localStorage.setItem(index, JSON.stringify(obj));
 }
