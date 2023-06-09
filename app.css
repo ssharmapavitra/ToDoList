@@ -16,13 +16,23 @@
 	width: 30%;
 	display: inline-block;
 }
+
+.id-no {
+	width: 10%;
+}
+.id {
+	width: 10%;
+	font-size: 20px;
+}
 .taskDisp {
 	width: 60%;
-	text-align: left;
+	text-align: center;
+	margin: 0 auto;
 }
-.checkBox {
-	width: 30%;
-	text-align: left;
+
+input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
 }
 textarea {
 	resize: none;
@@ -31,7 +41,7 @@ textarea {
 	font-weight: 600;
 }
 table {
-	font-size: smaller;
+	font-size: 24px;
 	margin: 3%;
 	padding: 2%;
 	border: 2px solid blue;

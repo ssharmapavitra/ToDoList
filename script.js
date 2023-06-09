@@ -1,16 +1,14 @@
 //Variables to store
 let taskId = 0;
-let indexCount = "indexCount";
-
-//Enter to input task
-var textBox = document.getElementById("textarea");
+const indexCount = "indexCount";
+const textBox = document.getElementById("textarea");
+const pen = `<svg xmlns=http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M17.263 2.177a1.75 1.75 0 0 1 2.474 0l2.586 2.586a1.75 1.75 0 0 1 0 2.474L19.53 10.03l-.012.013L8.69 20.378a1.753 1.753 0 0 1-.699.409l-5.523 1.68a.748.748 0 0 1-.747-.188.748.748 0 0 1-.188-.747l1.673-5.5a1.75 1.75 0 0 1 .466-.756L14.476 4.963ZM4.708 16.361a.26.26 0 0 0-.067.108l-1.264 4.154 4.177-1.271a.253.253 0 0 0 .1-.059l10.273-9.806-2.94-2.939-10.279 9.813ZM19 8.44l2.263-2.262a.25.25 0 0 0 0-.354l-2.586-2.586a.25.25 0 0 0-.354 0L16.061 5.5Z"></path></svg>`;
+const del = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M5.72 5.72a.75.75 0 0 1 1.06 0L12 10.94l5.22-5.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L13.06 12l5.22 5.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L12 13.06l-5.22 5.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L10.94 12 5.72 6.78a.75.75 0 0 1 0-1.06Z"></path></svg>`;
+//Accepting Enter key to add the task
 textBox.addEventListener("keyup", function (event) {
 	if (event.keyCode === 13) {
 		taskToAdd = textBox.value;
 		textBox.value = "";
-
-		let topr = document.getElementById("print");
-		// topr.innerHTML = taskToAdd;
 		addTaskToList(taskToAdd);
 	}
 });
@@ -24,7 +22,6 @@ function addTaskToList(taskToAdd) {
 	obj.status = false;
 	store(obj, taskId);
 	appendToUl(obj);
-	// console.log(taskList);
 }
 
 // function to append the task to the table
@@ -34,25 +31,55 @@ function appendToUl(obj) {
 	var c1 = document.createElement("td");
 	var c2 = document.createElement("td");
 	var c3 = document.createElement("td");
+	var c4 = document.createElement("td");
+	var c5 = document.createElement("td");
+
+	//Configure row
+	row.setAttribute("id", `row${obj.id}`);
+	row.setAttribute("class", "row");
+
+	//Configure id
+	c1.setAttribute("id", `id${obj.id}`);
+	c1.setAttribute("class", "id");
+
+	//Configure task
+	c2.setAttribute("id", `task${obj.id}`);
+	c2.setAttribute("class", "task");
 
 	//Configure checkbox
 	var check = document.createElement("input");
 	check.type = "checkbox";
 	check.id = `checkId${obj.id}`;
 	check.setAttribute("onclick", `OnCheckUncheck(checkId${obj.id})`);
+	//Check if the task is already checked
 	if (obj.status == true) {
 		row.setAttribute("class", "checked");
 		check.checked = true;
 	}
+
+	//Configure pen icon
+	c4.setAttribute("class", "pen");
+	c4.setAttribute("id", `penId${obj.id}`);
+	c4.setAttribute("onclick", `editTask(penId${obj.id})`);
+
+	//Configure delete icon
+	c5.setAttribute("class", "del");
+	c5.setAttribute("id", `delId${obj.id}`);
+	c5.setAttribute("onclick", `deleteTask(delId${obj.id})`);
+
 	//adding values
 	c1.innerHTML = obj.id;
 	c2.innerHTML = obj.task;
 	c3.appendChild(check);
+	c4.innerHTML = pen;
+	c5.innerHTML = del;
 
 	//appending to row
 	row.appendChild(c1);
 	row.appendChild(c2);
 	row.appendChild(c3);
+	row.appendChild(c4);
+	row.appendChild(c5);
 
 	//appending row to table
 	tableId.appendChild(row);
@@ -64,11 +91,9 @@ function OnCheckUncheck(checkEle) {
 	if (checkEle.checked) {
 		checkEle.parentNode.parentNode.setAttribute("class", "checked");
 		setObjStatus(index, true);
-		// taskList[index].status = true;
 	} else {
 		checkEle.parentNode.parentNode.setAttribute("class", "");
 		setObjStatus(index, false);
-		// taskList[index].status = false;
 	}
 }
 
@@ -80,14 +105,17 @@ function store(obj, index) {
 	console.log(index, typeof index);
 }
 
+// function to fetch all the data from the local storage
 function fetchAll() {
 	if (!localStorage.getItem(indexCount)) {
 		localStorage.setItem(indexCount, 0);
-		// alert("No data");
 		return;
 	}
 	taskId = localStorage.getItem(indexCount);
 	for (let i = 1; i <= taskId; i++) {
+		if (!localStorage.getItem(i)) {
+			continue;
+		}
 		let obj = JSON.parse(localStorage.getItem(i));
 		appendToUl(obj);
 	}
@@ -104,4 +132,32 @@ function setObjStatus(index, status) {
 	let obj = JSON.parse(localStorage.getItem(index));
 	obj.status = status;
 	localStorage.setItem(index, JSON.stringify(obj));
+}
+
+// function to delete the task from the list
+function deleteTask(delEle) {
+	let index = delEle.id.at(-1);
+	let obj = JSON.parse(localStorage.getItem(index));
+	localStorage.removeItem(index);
+	deleteRow(`row${index}`);
+}
+
+//function to delete a row
+function deleteRow(rowId) {
+	let row = document.getElementById(rowId);
+	row.parentNode.removeChild(row);
+}
+
+// function to edit the task
+function editTask(penEle) {
+	let index = penEle.id.at(-1);
+	let obj = JSON.parse(localStorage.getItem(index));
+	let task = prompt("Enter the task", obj.task);
+	if (task == null || task == "") {
+		alert("Task cannot be empty");
+		return;
+	}
+	obj.task = task;
+	localStorage.setItem(index, JSON.stringify(obj));
+	document.getElementById(`task${index}`).innerHTML = task;
 }
