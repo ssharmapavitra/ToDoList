@@ -1,0 +1,42 @@
+* {
+	box-sizing: border-box;
+}
+.tablecontainer {
+	padding: 10px;
+	margin: 0 auto;
+	width: 40%;
+	border: 1px solid black;
+	border-collapse: collapse;
+	float: left;
+	display: inline-block;
+	background-color: aliceblue;
+}
+.textBox {
+	margin-left: 5%;
+	width: 30%;
+	display: inline-block;
+}
+.taskDisp {
+	width: 60%;
+	text-align: left;
+}
+.checkBox {
+	width: 30%;
+	text-align: left;
+}
+textarea {
+	resize: none;
+	border: 2px solid red;
+	font-size: 25px;
+	font-weight: 600;
+}
+table {
+	font-size: smaller;
+	margin: 3%;
+	padding: 2%;
+	border: 2px solid blue;
+	width: 90%;
+}
+.checked {
+	background-color: red;
+}
