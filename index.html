@@ -8,23 +8,23 @@
 		<link rel="stylesheet" href="./app.css" />
 	</head>
 	<body onload="fetchAll()">
-		<h1>This is a ToDo List</h1>
+		<!-- <h2>This is a Todo List</h2> -->
+		<div class="container">
+			<div class="tablecontainer">
+				<h3>Task List</h3>
+				Add task to your list by typing to the right and pressing enter. You may
+				then view pending tasks below.
+				<br />
+				<table id="table1" class="table">
+					<tr>
+						<th class="id-no"></th>
+						<th class="taskDisp"></th>
+						<th class="checkBox"></th>
+						<th class="delete"></th>
+						<th class="pen"></th>
+					</tr>
 
-		<div class="tablecontainer">
-			<h3>Task List</h3>
-			Add task to your list by typing to the right and pressing enter. You may
-			then view pending tasks below.
-			<br />
-			<table id="table1" class="table">
-				<tr>
-					<th class="id-no"></th>
-					<th class="taskDisp"></th>
-					<th class="checkBox"></th>
-					<th class="delete"></th>
-					<th class="pen"></th>
-				</tr>
-
-				<!-- <tr class="">
+					<!-- <tr class="">
 					<td>1</td>
 					<td>Task 1</td>
 					<td>
@@ -35,30 +35,25 @@
 						/>
 					</td>
 					<td>-->
-				<!-- penIcon 
+					<!-- penIcon 
 					</td>
 					<td>
 						-->
-				<!-- deleteIcon 
+					<!-- deleteIcon 
 					</td>
 				</tr> -->
-			</table>
+				</table>
+			</div>
+
+			<div class="textBox" id="tarea">
+				<textarea name="inputtext" id="textarea" cols="20" rows="5"></textarea>
+				<br /><br />
+				<button id="btn" class="btn" type="Submit" onclick="clearAllData()">
+					Clear All Data
+				</button>
+			</div>
 		</div>
-
-		<div class="textBox" id="tarea">
-			<textarea name="inputtext" id="textarea" cols="20" rows="5"></textarea>
-
-			<button id="btn" type="Submit" onclick="clearAllData()">
-				Clear All Data
-			</button>
-		</div>
-
 		<!-- use this svg in 5 divs -->
-
-		<div></div>
-		<div></div>
-		<div></div>
-		<div></div>
 		<script src="./script.js"></script>
 	</body>
 </html>
