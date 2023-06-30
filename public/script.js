@@ -120,6 +120,7 @@ function clearAllData() {
 	clearData(() => {
 		let table = document.getElementById("table1");
 		table.innerHTML = "";
+		location.reload();
 	});
 }
 
@@ -228,4 +229,3 @@ function clearData(callback) {
 }
 
 */
-

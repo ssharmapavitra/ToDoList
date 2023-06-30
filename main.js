@@ -55,7 +55,7 @@ app.post("/getItem", function (req, res) {
 		if (index > todos.length) res.send("-1");
 		else {
 			res.json(todos[index]);
-			console.log(todos[index]);
+			// console.log(todos[index]);
 		}
 	});
 });
