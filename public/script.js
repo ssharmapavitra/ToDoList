@@ -16,12 +16,18 @@ textBox.addEventListener("keyup", function (event) {
 
 // function to add the task to the list
 function addTaskToList(taskToAdd) {
+	taskToAdd = taskToAdd.trim();
+	if (taskToAdd == "") {
+		alert("Please enter a valid task");
+		return;
+	}
+
 	taskId++;
 	let obj = {};
 	obj.id = taskId;
 	obj.task = taskToAdd;
 	obj.status = false;
-	store(obj, appendToUl);
+	setToDo(obj, appendToUl);
 }
 
 // function to append the task to the table
@@ -88,7 +94,8 @@ function appendToUl(obj) {
 
 // function to check and uncheck the checkbox
 function OnCheckUncheck(checkEle) {
-	let index = checkEle.id.at(-1);
+	let index = checkEle.id.substring(7);
+	console.log(index);
 	if (checkEle.checked) {
 		setObjStatus(index, true, () => {
 			checkEle.parentNode.parentNode.setAttribute("class", "checked");
@@ -98,11 +105,6 @@ function OnCheckUncheck(checkEle) {
 			checkEle.parentNode.parentNode.setAttribute("class", "");
 		});
 	}
-}
-
-// function to store the data in the local storage
-function store(obj, callback) {
-	setToDo(obj, callback);
 }
 
 // function to fetch all the data from the local storage
@@ -134,7 +136,7 @@ function setObjStatus(index, status, callback) {
 
 // function to delete the task from the list
 function deleteTask(delEle) {
-	let index = delEle.id.at(-1);
+	let index = delEle.id.substring(5);
 	deleteToDo(index, () => {
 		deleteRow(`row${index}`);
 	});
@@ -148,9 +150,10 @@ function deleteRow(rowId) {
 
 // function to edit the task
 function editTask(penEle) {
-	let index = penEle.id.at(-1);
+	let index = penEle.id.substring(5);
 	getItem(index, (obj) => {
 		let task = prompt("Enter the task", obj.task);
+		task = task.trim();
 		if (task == null || task == "") {
 			alert("Task cannot be empty");
 			return;
@@ -162,7 +165,7 @@ function editTask(penEle) {
 	});
 }
 
-//Server calls
+//-----------------------Server calls---------------------------------------------
 
 //function to get all values from server
 function getTodo(callback) {
@@ -227,5 +230,50 @@ function clearData(callback) {
     "task": "Sample_task\n\t\t\t",
     "status": false
 }
+
+*/
+
+/*
+
+// function to edit the task
+function editTask(penEle) {
+	let index = penEle.id.substring(5);
+	getItem(index, (obj) => {
+		// let task = prompt("Enter the task", obj.task);
+		//Show task on text box
+		let box = document.getElementById("textarea");
+		box.value = obj.task;
+		box.focus();
+		//Change the button to save
+		let button = document.getElementById("addButton");
+		button.innerHTML = "Save";
+		button.setAttribute("onclick", `saveTask(${index})`);
+	});
+}
+
+// function to save the task
+function saveTask(index) {
+	let obj = {};
+	obj.id = index;
+	let box = document.getElementById("textarea");
+	let task = box.value;
+	task = task.trim();
+	if (task == null || task == "") {
+		alert("Task cannot be empty");
+		return;
+	}
+	obj.task = task;
+	setToDo(obj, () => {
+		document.getElementById(`task${index}`).innerHTML = task;
+	});
+	//remove the button
+	let button = document.getElementById("addButton");
+	button.innerHTML = "Add";
+	button.setAttribute("onclick", "addTask()");
+	//clear the text box
+	box.value = "";
+}
+
+
 
 */
