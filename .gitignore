@@ -1,3 +1,8 @@
 .vscode/settings.json
 *node_modules/
 *.json
+uploads/*
+
+# ignore all txt files in the every directory
+*.txt
+

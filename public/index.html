@@ -19,6 +19,7 @@
 					<tr>
 						<th class="id-no"></th>
 						<th class="taskDisp"></th>
+						<th class="taskImg"></th>
 						<th class="checkBox"></th>
 						<th class="delete"></th>
 						<th class="pen"></th>
@@ -53,6 +54,15 @@
 					rows="5"
 					placeholder="Enter your task"
 				></textarea>
+				<input type="file" name="taskImg" title="taskImg" id="fileUpload" />
+				<button
+					id="subBtn"
+					class="btn btn2"
+					type="submit"
+					onclick="onTaskSubmit()"
+				>
+					Submit
+				</button>
 				<br /><br />
 				<button id="btn" class="btn" type="Submit" onclick="clearAllData()">
 					Clear All Data

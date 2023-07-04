@@ -1,13 +1,22 @@
 const express = require("express");
 const fs = require("fs");
 const app = express();
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 const port = 3000;
 
 app.use(express.static("public"));
+app.use(express.static("uploads"));
 app.use(express.json());
 
 app.get("/", (req, res) => {
 	res.send("Sorry ! Page Not Found");
+});
+
+//Saving an image to uploads
+app.post("/setImage", upload.single("taskImg"), function (req, res) {
+	let path = JSON.stringify(req.file.filename);
+	res.send(path);
 });
 
 //Saving an object to ToDoList

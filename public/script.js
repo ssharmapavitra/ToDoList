@@ -6,16 +6,28 @@ const pen = `<svg xmlns=http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="2
 const del = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M5.72 5.72a.75.75 0 0 1 1.06 0L12 10.94l5.22-5.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L13.06 12l5.22 5.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L12 13.06l-5.22 5.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L10.94 12 5.72 6.78a.75.75 0 0 1 0-1.06Z"></path></svg>`;
 
 //Accepting Enter key to add the task
-textBox.addEventListener("keyup", function (event) {
-	if (event.keyCode === 13) {
+function onTaskSubmit() {
+	let imgFile = document.getElementById("fileUpload").files[0];
+	//check if file is of or not
+	if (imgFile == undefined) {
+		alert("Please upload an image");
+		return;
+	}
+	if (!imgFile.type.includes("image")) {
+		alert("Please upload an image");
+		return;
+	}
+	setImage(imgFile, (path) => {
 		taskToAdd = textBox.value;
 		textBox.value = "";
-		addTaskToList(taskToAdd);
-	}
-});
+		addTaskToList(taskToAdd, path);
+	});
+	//clear file upload
+	document.getElementById("fileUpload").value = "";
+}
 
 // function to add the task to the list
-function addTaskToList(taskToAdd) {
+function addTaskToList(taskToAdd, path) {
 	taskToAdd = taskToAdd.trim();
 	if (taskToAdd == "") {
 		alert("Please enter a valid task");
@@ -27,6 +39,7 @@ function addTaskToList(taskToAdd) {
 	obj.id = taskId;
 	obj.task = taskToAdd;
 	obj.status = false;
+	obj.imgPath = path;
 	setToDo(obj, appendToUl);
 }
 
@@ -39,6 +52,7 @@ function appendToUl(obj) {
 	var c3 = document.createElement("td");
 	var c4 = document.createElement("td");
 	var c5 = document.createElement("td");
+	var cimg = document.createElement("td");
 
 	//Configure row
 	row.setAttribute("id", `row${obj.id}`);
@@ -51,6 +65,12 @@ function appendToUl(obj) {
 	//Configure task
 	c2.setAttribute("id", `task${obj.id}`);
 	c2.setAttribute("class", "task");
+
+	//Configure Image
+	cimg.setAttribute("class", "taskImg");
+	let img = document.createElement("img");
+	img.setAttribute("src", obj.imgPath);
+	cimg.appendChild(img);
 
 	//Configure checkbox
 	var check = document.createElement("input");
@@ -84,6 +104,7 @@ function appendToUl(obj) {
 	//appending to row
 	row.appendChild(c1);
 	row.appendChild(c2);
+	row.appendChild(cimg);
 	row.appendChild(c3);
 	row.appendChild(c4);
 	row.appendChild(c5);
@@ -95,7 +116,6 @@ function appendToUl(obj) {
 // function to check and uncheck the checkbox
 function OnCheckUncheck(checkEle) {
 	let index = checkEle.id.substring(7);
-	console.log(index);
 	if (checkEle.checked) {
 		setObjStatus(index, true, () => {
 			checkEle.parentNode.parentNode.setAttribute("class", "checked");
@@ -167,6 +187,17 @@ function editTask(penEle) {
 
 //-----------------------Server calls---------------------------------------------
 
+//funtion to set image into database
+function setImage(imgFile, callback) {
+	let formData = new FormData();
+	formData.append("taskImg", imgFile);
+	let request = new XMLHttpRequest();
+	request.open("POST", "/setImage", true);
+	request.send(formData);
+	request.addEventListener("load", () => {
+		callback(JSON.parse(request.responseText));
+	});
+}
 //function to get all values from server
 function getTodo(callback) {
 	let request = new XMLHttpRequest();
@@ -229,6 +260,7 @@ function clearData(callback) {
     "id": 1,
     "task": "Sample_task\n\t\t\t",
     "status": false
+	"imgPath": " "
 }
 
 */

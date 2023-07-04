@@ -38,6 +38,10 @@
 	text-align: center;
 	margin: 0 auto;
 }
+.taskImg img {
+	height: 50px;
+	width: 50px;
+}
 
 input[type="checkbox"] {
 	width: 20px;
@@ -74,4 +78,5 @@ table {
 	font-weight: 50;
 	border: 0.1px solid rgb(65, 163, 249);
 	margin-top: 3%;
+	cursor: pointer;
 }
