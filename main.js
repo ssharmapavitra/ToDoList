@@ -60,11 +60,9 @@ app.post("/getItem", function (req, res) {
 
 		//Getting index
 		let index = req.body.index - 1;
-		// console.log(index);
 		if (index > todos.length) res.send("-1");
 		else {
 			res.json(todos[index]);
-			// console.log(todos[index]);
 		}
 	});
 });
